@@ -9,7 +9,7 @@ Course taught by prof. Rune Halvorsen at the University of Oslo.
 Download this repository by either...
 
 1. clicking the `code` button above, downloading the zipped repository, and unzipping it to your desired folder
-2. installing Git, opening a terminal/Git Bash from your desired folder and running `git clone https://github.com/geco-nhm/methods-of-gradient-analysis`.
+2. installing Git, opening a terminal/Git Bash from your desired folder and running `git clone https://github.com/geco-nhm/methods-of-gradient-analysis.git`.
 
 ## Contents
 
