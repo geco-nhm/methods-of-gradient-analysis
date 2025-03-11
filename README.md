@@ -17,4 +17,9 @@ Download this repository by either...
 
 | file | explanation |
 | ---- | ----------- |
-| ...  | ... |
+| README.md  | This file, which GitHub reads as the front page for the repository. |
+| about_the_course.md | General information about the course, copied from Rune's introduction and schedule for the 2025 course. |
+| P_GeneralScriptOrdination_25.R | General script for customised ordination diagrams and related illustrations |
+| P 0--7 .R | Scripts for practicals (data labs) 0 to 7. |
+| /example_scripts_by_students | Folder for adding student-made example scripts |
+| /scripts_with_base_R_plotting | Folder for older versions of practicals with plotting code in base R (as opposed to ggplot2 used in newer versions)|
