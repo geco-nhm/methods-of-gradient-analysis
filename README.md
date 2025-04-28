@@ -1,9 +1,9 @@
 # Methods of Gradient Analysis
 
-This repository contains teaching material for the course [BIOS5210 – Methods of Gradient Analysis](https://www.uio.no/studier/emner/matnat/ibv/BIOS5210/index-eng.html). Course taught by prof. Rune Halvorsen at the University of Oslo.
+This repository contains teaching material for the course [BIOS5210 – Methods of Gradient Analysis](https://www.uio.no/studier/emner/matnat/ibv/BIOS5210/index-eng.html). Course taught by prof. Rune Halvorsen at the University of Oslo. Read the general information in [about_the_course.md](https://github.com/geco-nhm/methods-of-gradient-analysis/blob/main/about_the_course.md) for an introduction to the topic, learning outcomes, and what to expect.
 
 Repository generated March 2025.
-Code authors include: Rune Halvorsen, Adam E. Naas, Eva Lieungh
+Code authors include Rune Halvorsen, Adam E. Naas, Eva Lieungh
 
 ## Using the code
 
@@ -18,9 +18,12 @@ Download this repository by either...
 
 | file | explanation |
 | ---- | ----------- |
+| /example_scripts_by_students | Folder for adding student-made example scripts |
+| /scripts_with_base_R_plotting | Folder for older versions of practicals with plotting code in base R (as opposed to ggplot2 used in newer versions)|
+| LICENSE | Specifies the code license. |
 | README.md  | This file, which GitHub reads as the front page for the repository. |
 | about_the_course.md | General information about the course, copied from Rune's introduction and schedule for the 2025 course. |
 | P_GeneralScriptOrdination_25.R | General script for customised ordination diagrams and related illustrations |
-| P 0--7 .R | Scripts for practicals (data labs) 0 to 7. |
-| /example_scripts_by_students | Folder for adding student-made example scripts |
-| /scripts_with_base_R_plotting | Folder for older versions of practicals with plotting code in base R (as opposed to ggplot2 used in newer versions)|
+| .csv | Data for practicals, as comma separated values. Real ecological dat sets. |
+| P0-7 .R | Scripts for practicals (data labs) 0 to 7. |
+| P1_GSAtrans.xls | Data transformation example with formulas, in ols Excel format. |
