@@ -1,29 +1,31 @@
+#######################################################
+# P4 GNMDS
+#######################################################
+
 # Script for GNMDS based upon Oppkuven data set
+
 # Import libraries
 library(vegan)
 library(MASS)
 library(stats)
 library(mgcv)
 library(ggplot2)
-library(readxl)
 library(dplyr)
 
-# Importing species data from Oppkuven.xls/Species
-# Note: Skip first column!
-y <- read.table("clipboard", header = TRUE)
+# Loading and attaching data -------------------------------------------
 
-# Loading and attaching environmental variable matrix:
-env.var <- read.table("clipboard", header = TRUE)
+# Check and change the working directory if necessary
+getwd()
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
-# Automatic import
-setwd("C:/Users/"[insert the path to your working directory here]) #Set working directory
+# Importing species data from Oppkuven
+y <- read.csv("P1_Oppkuven_species.csv") %>% 
+	as.data.frame() %>%
+        select(-Stand)
 
-
-# Import excel sheets
-y_excel <- read_xls("P2_Oppkuven.xls", sheet = "Species") %>% as.data.frame()
-y <- y_excel[, 2:ncol(y_excel)]
-
-env.var <- read_xls("P2_Oppkuven.xls", sheet = "Env.var", skip = 1) %>% as.data.frame()
+# Importing environmental variable matrix:
+env.var <- read.csv("P1_Oppkuven_environmental_variables.csv") %>% 
+	as.data.frame()
 
 # Attach variables to names
 attach(y)
@@ -33,22 +35,31 @@ attach(env.var)
 names(env.var)
 
 
+# Make dissimilarity matrix and make GNMDS's -----------------------------------
 # Making Bray-Curtis dissimilarity matrix:
 dist.y <- vegdist(y, method = "bray") 
 dist.y 
+
 # Replacing unreliable distances (B-C > 0.8 by geodesic distances,
 # using stepacross; note that the optimal value for epsilon may be dataset-specific
 geodist.y <- isomapdist(dist.y, epsilon = 0.8)
 geodist.y
 
-k <- 2 # k determines the number of dimensions in the ordination
+# Set the number of dimensions, k, in the ordination
+k <- 2 
+
 # Define a general, empty object called mds:
 mds <- NULL
+
 # Making 100 "mds"s from initial starting configurations, allocating them into the mds object:
 for (i in 1:100) {
-  
-  mds[[i]] <- monoMDS(geodist.y, matrix(c(runif(dim(y)[1] * k)), nrow = dim(y)[1]), k = 2, model = "global", maxit = 200, smin = 1e-7, sfgrmin = 1e-7)
-  
+  mds[[i]] <- monoMDS(geodist.y, matrix(c(runif(dim(y)[1] * k)), 
+                      nrow = dim(y)[1]), 
+                      k = 2, 
+                      model = "global", 
+                      maxit = 200, 
+                      smin = 1e-7, 
+                      sfgrmin = 1e-7)
   }
 
 # Alternative options: model = "local", "linear" or "hybrid" with threshold = [value]
@@ -60,8 +71,10 @@ mds.stress <- unlist(lapply(mds, function(v) { v$stress }))
 
 # Looking at the stress values for 100 mds:
 mds.stress
+
 # Ordering the stress values for the 100 mds:
 order(mds.stress)
+
 # Saving the order in a vector
 ordered <- order(mds.stress)
 ordered
@@ -77,7 +90,6 @@ mds.best <- postMDS(mds[[ordered[1]]], dist.y, pc = TRUE, halfchange = TRUE, thr
 mds.best
 mds.secbest <- postMDS(mds[[ordered[2]]], dist.y, pc = TRUE, halfchange = TRUE, threshold = 0.8)
 mds.secbest
-
 
 # Procrustes comparisons
 procrustes_fit <- procrustes(mds.best, mds.secbest, permutations = 999)

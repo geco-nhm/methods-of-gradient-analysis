@@ -1,21 +1,23 @@
+#######################################################
+# P1 PCA of environmental variables
+#######################################################
+
 # Import libraries
-library(readxl)
 library(vegan)
 library(ggplot2)
 library(dplyr)
 
+# Loading and attaching environmental variable matrix (Oppkuven) -------------------------------------------
 
-# Loading and attaching environmental variable matrix (Oppkuven.xls), worksheet 'Env.var'
-env.var <- read.table("clipboard", header = TRUE)
+# Check and change the working directory if necessary
+getwd()
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
+# Import data from file
+env.var <- read.csv("P1_Oppkuven_environmental_variables") %>% 
+	as.data.frame()
 
-# Automatic import
-setwd("C:/Users/"[insert the path to your working directory here]) #Set working directory
-
-# Import excel sheets
-env.var <- read_xls("P2_Oppkuven.xls", sheet = "Env.var", skip = 1) %>% as.data.frame()
-
-
+# Attach data to the R environment
 attach(env.var)
 names(env.var)
 str(env.var)
@@ -32,7 +34,7 @@ cor(env.var, method = "kendall")
 
 
 
-## PCA ordination of environmental variables
+# PCA ordination of environmental variables -----------------------------------------------------------------------
 
 pca.r <- rda(env.var, scale = TRUE) #The 'scaling' argument, which specifies the scaling of axes, is only needed in 'summary' and plot' commands
 summary(pca.r) # Note that default is 'scaling = 2' (= correlation biplot scaling; optimising intervariable correlations)

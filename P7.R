@@ -1,4 +1,6 @@
+#######################################################
 # Practical 7: Semivariograms
+#######################################################
 
 # Import libraries
 library(geoR)
@@ -6,26 +8,17 @@ library(sp)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(openxlsx)
 
-# Check and change working directory if necessary
+# Loading and attaching data -------------------------------------------
+
+# Check and change the working directory if necessary
 getwd()
-setwd("C:/Users/Tinkerbell/methods-of-gradient-analysis") 
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
-# Importing data from BSKGEO08.xlsx (entire spreadsheet) as geoR object
+# Import data from file
 MR.gd <-
   read.geodata(
-    "clipboard",
-    header = TRUE,
-    coords.col = 1:2,
-    data.col = 3:75)
-
-# Alternatively, import data via csv:
-d <- read.xlsx("P7_BSKGEO08.xlsx")
-write.table(d, "d.csv")
-MR.gd <-
-  read.geodata(
-    "d.csv",
+    "P7_BSKGEO08.csv",
     header = TRUE,
     coords.col = 1:2,
     data.col = 3:75)
@@ -33,7 +26,7 @@ MR.gd <-
   #' and decimal comma instead of period. In that case, add these arguments:
   #' sep = ";", dec = ","
 
-# Attach vaariables to names
+# Attach variables to names
 attach(MR.gd)
 names(MR.gd)
 
@@ -96,6 +89,8 @@ variogram_data <- data.frame(
   breaks
 )
 
+
+# Plotting -------------------------------------------------------- 
 # Create baseline plot
 baseline_plot <- ggplot() + 
   theme_bw() + 
@@ -157,6 +152,8 @@ baseline_plot +
   labs(x = "Distance (log2 scale)", 
        y = paste0("Standardised semivariance (", sel_var, ")"))
 
+
+# Repeat for new variable -------------------------------------
 # We repeat the process for a new variable, HumusN
 sel_var <- "HumusN"
 variable_index <- 

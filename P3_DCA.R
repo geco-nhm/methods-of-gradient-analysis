@@ -1,33 +1,29 @@
+#######################################################
+# P3 Detrended Correspondence Analysis (DCA)
+#######################################################
+
 # Import libraries:
-library(readxl)
-library(writexl)
 library(vegan)
 library(mgcv)
 library(ggplot2)
 library(dplyr)
 
-# Load and attach datasets:
-# NB: Do not import first column (stand) of data spreadsheet
-dca.tot <- read.table("clipboard", header = TRUE)
+# Loading and attaching data -------------------------------------------
 
-# Then import the stand column separately
-stand.data <- read.table("clipboard", header = TRUE)
+# Check and change the working directory if necessary
+getwd()
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
-# Loading and attaching environmental variable matrix:
-env.var <- read.table("clipboard", header = TRUE)
+# Import data from file
+env.var <- read.csv("P1_Oppkuven_environmental_variables.csv") %>% 
+	as.data.frame()
 
-# Automatic import
-setwd("C:/Users/"[insert the path to your working directory here]) #Set working directory
+dca.tot <- read.csv("P1_Oppkuven_species.csv") %>% 
+	as.data.frame() 
 
-# Import excel sheets
-dca.tot_excel <- read_xls("P2_Oppkuven.xls", sheet = "Species") %>% as.data.frame()
-dca.tot <- dca.tot_excel[, 2:ncol(dca.tot_excel)]
+stand.data <- data.frame(Stand = dca.tot$Stand)
 
-stand.data_excel <- read_xls("P2_Oppkuven.xls", sheet = "Species") %>% as.data.frame()
-stand.data <- data.frame(Stand = stand.data_excel[, 1])
-
-env.var <- read_xls("P2_Oppkuven.xls", sheet = "Env.var", skip = 1) %>% as.data.frame()
-
+dca.tot <- select(-"Stand") # Remove first column of data (stand) 
 
 # Attach variables to names
 attach(dca.tot)
@@ -44,7 +40,7 @@ mode(Stand)
 stand <- as.factor(Stand)
 stand
 
-
+# DCA ----------------------------------------------------------------
 # Running DCA on species-plot matrix:
 dca.r <- decorana(dca.tot)
 summary(dca.r)
@@ -54,11 +50,11 @@ summary(dca.r)
 # from the centroid to the lower end of each axis
 dca_sites <- scores(dca.r, display = "sites", origin = FALSE) %>% as.data.frame()
 
-# Saving DCA axes to Excel
-write_xlsx(dca_sites, "dca.xlsx")
+# Saving DCA axes as a csv file
+write.csv(dca_sites, "dca.csv", rownames = FALSE)
 
 
-
+# Plotting -----------------------------------------------------------
 # Plotting DCA - baseline plot:
 dca_plot <- ggplot() + coord_fixed(ratio = 1) + theme_bw() + theme(panel.grid.major = element_blank())
 

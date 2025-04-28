@@ -1,32 +1,43 @@
+#######################################################
+# P1 Kendall's tau correlation testing
+#######################################################
+
 # Import libraries
-library(readxl)
 library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(corrplot)
 
+# Load data ----------------------------------------------------------------------
+#' Load environmental variables from file P1_PONDenvvar.csv (variables as columns)
 
-# Load environmental variable data from file P1_PONDenvvar.xls (variables as columns)
-# (variable names as header in first row)
-envvar <- read.table("clipboard", header = TRUE)
+# Check and change the working directory if necessary
+getwd()
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
+# Load data (environmental variables in several ponds)
+envvar <- read.csv("P1_PONDenvvar.csv", sep = ",") %>% 
+	as.data.frame() # make sure it is read as data frame
 
-# Automatic import
-setwd("C:/Users/"[insert the path to your working directory here]) #Set working directory
-
-# Import excel sheets
-envvar_excel <- read_xls("P1_PONDenvvar.xls") %>% as.data.frame()
-envvar <- envvar_excel[, 1:6] # Only include column 1-6
-
+#' Column descripton for raw data:
+#' PareaRAW = Pond area
+#' AvgWidRAW = Average width of the pond
+#' MaxDepRAW = Maximum depth of the pond
+#' AltRAW = Altitude, where is the pond located
+#' CndRAW = Conductivity (vannets ledningsevne)
+#' pHRAW = pH
 
 # Attach variables to names
 attach(envvar)
 ev <- names(envvar)
+ev
 
 # Number of variables
 n <- ncol(envvar)
+n
 
-# Make empty datasets
+# Get correlation coefficients and p-values ----------------------------------
+# Make empty datasets to be filled with data in an iterative loop below
 # For p-values
 pvalues <- matrix(data = NA, nrow = n, ncol = n)
 pvalues <- as.data.frame(pvalues)
@@ -57,17 +68,16 @@ for(i in 1:n) {
   }
 }
 
-
+# look at the resulting p estimates
 pvalues
+
+# look at the tau estimates
 tauvalues
 
+# From here: Alternative ways to display results --------------------------------
 
-# From here: Alternative ways to display results
-
-## Simplified display of results (with symbols indicative of 'significance')
+# Simplified display of results (with symbols indicative of 'significance')
 symnum(cor(envvar, method = "kendall"), abbr = FALSE)
-
-
 
 # Plot correlation matrix with corrplot
 # corrplot requires that the data are stored in a matrix format
@@ -90,7 +100,6 @@ corrplot(corr = corr_matrix,
          insig = "label_sig")
 
 # If you want to, run "?corrplot" for additional layout options
-
 
 # Making a vector of environmental variable names
 evnames <- names(ev)

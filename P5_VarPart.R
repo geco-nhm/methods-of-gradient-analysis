@@ -1,29 +1,33 @@
-# This script exemplifies the commands involved in the P5 exercise with variation partitioning
+#########################################################################
+# P5: Variation partitioning
+#########################################################################
+
+#' This script exemplifies commands involved in variation partitioning.
+#' We use the swamp forest data (three files; see P5_Task.doc for info).
+#' In this script the three files are imported as SITES,
+#' SPECIES and ENV. Note that when you are 
+#' to do the exercise, you can use the BSK1E_8var.csv file, which just 
+#' contains the 8 pre-selected environmental variables. We import the 
+#' zero-skewness transformed environmental variables (lower matrix).
+#' Use spreadsheet ZSDATA which contains the 53 zero-skewness transformed 
+#' variables.
+
+# Load libraries
 library(vegan)
-library(readxl)
 library(dplyr)
-# We use the swamp forest data (three files; see P5_Task.doc for info)
-# In this script the three files are imported as SITES (P5_BSK1A.xls), SPECIES (P5_BSK1S.xls) and ENV (P5_BSK1E.xls)
-# Note that when you are to do the exercise, you can use the BSK1E8var.xls file,.
-# which just contains the 8 selected environmental variables
-# We import the zero skewness transformed environmental variables (lower matrix)
-# Use spreadsheet ZSDATA which contains the 53 zero-skewness transformed variables
 
-SITES <- read.table("clipboard", header = TRUE)
-SPECIES <- read.table("clipboard", header = TRUE)
-ENV <- read.table("clipboard", header = TRUE)
+# Loading and attaching data -------------------------------------------
 
+# Check and change the working directory if necessary
+getwd()
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
-# Automatic import
-setwd("C:/Users/"[insert the path to your working directory here]) #Set working directory
+# Import data from file
+SITES <- read.csv("P5_BSK1A.csv", header = TRUE) %>% as.data.frame()
+SPECIES <- read.csv("P5_BSK1S.csv", header = TRUE) %>% as.data.frame()
+ENV <- read.csv("P5_BSK1E_zsdata.csv", header = TRUE) %>% as.data.frame()
 
-# Import excel sheets
-SITES <- read_xls("P5_BSK1A.xls", skip = 1) %>% as.data.frame()
-SPECIES <- read_xls("P5_BSK1S.xls") %>% as.data.frame()
-ENV <- read_xls("P5_BSK1E.xls", sheet = "ZSDATA") %>% as.data.frame()
-
-
-# Attach variables to names
+## Attach variables to names ----
 attach(SITES)
 attach(SPECIES)
 attach(ENV)
@@ -31,10 +35,12 @@ names(SITES)
 names(SPECIES)
 names(ENV)
 
-# SITES contains one variable called 'AFF'. This is a factor variable with 11 levels. In order to tell
-# R that this is a factor variable: 
+#' SITES contains one variable called 'AFF'. 
+#' This is an factor variable with 11 levels. 
+#' In order to tell R that this is a factor variable: 
 SITE <- factor(AFF)
 
+# CCA -------------------------------------------------------------------
 # We find the variation attributed to SITE
 CCA0 <- cca(SPECIES ~ SITE) # Use of the entire matrix of constr. vars seems perhaps not to work with vegan 2.0
 CCA0
@@ -47,7 +53,6 @@ CCA0
 # Finding if this is more than attributable to a random variable
 testCCA <- permutest(CCA0, permutations = 999)  # permutest.cca replaced by permutest() in vegan 2.0
 testCCA
-
 
 # Commands that will be used:
 

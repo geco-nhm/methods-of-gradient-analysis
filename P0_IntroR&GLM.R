@@ -1,49 +1,68 @@
-# Importing data from Excel and attaching an object
-# Use file DamVar.xls
-data <- read.table("clipboard", header = TRUE)
+#######################################################
+# P0 Introduction to R and generalized linear models
+#######################################################
+
+# Check your working directory - if you opened R through 
+# clicking this script, R/RStudio will set the working 
+# directory to its containing folder. Check if this is
+# correct with getwd()
+getwd()
+
+# if necessary, change your working directory with setwd()
+setwd() <- getwd() # replace with "C:/users/yourname/methods-of-gradient-analysis"
+
+# Load and inspect data ----------------------------------------------------------
+# Import data from P0_DamVar.csv
+data <- read.csv("P0_DamVar.csv", sep = ",")
+
+# For import of files, remember to include the whole path to the file, or ensure that the file is placed in the working directory
+
+# Attach data to enable working with variables (data columns) 
+# directly, instead of using the standard format (e.g. data$variable). 
+# NB! Attaching data is not recommended if 
+# you need to work with multiple datasets, or if any of the 
+# variable names have the same name as a function or something else
+
 attach(data)
 names(data)
 str(data)  # Gives overview of data structure
 head(data)  # Gives the first observations of each variable
 
-# Import from the clipboard sometimes fails, for obscure reasons (it always fails for Mac users)
-# There are many alternatives; data can be imported to R from many different formats
-# The most frequently used formats are '.txt' and '.csv'
-# For import of files, remember to include the whole path to the file, or ensure that the file is placed in the working directory
-
-# Case sensitive, breaks such as "space" are not allowed, decimal sign may be changed
-# from default '.' to ',' by adding 'dec = ","' in opening 'data' command 
+# R code is case sensitive, breaks such as "space" are not allowed, decimal sign may be changed
+# from default '.' to ',' by adding 'dec = ","' in opening 'data' command. Norwegian computers use 
+# semicolon as separator, while others use comma as separator, etc.
 # Note that single quotes '' are used to delimit statements, double quotes are part of the R command
 
 parea
 Parea
 
-# Entire matrix, column/vector-subset and row
+# Look at the entire matrix, column/vector-subset and row
 data
+
 data[, 1]
 
 data[1, ]
 
-# Allocation by using the gets arrow, no header
+# Allocation by using the arrow, no header
 area <- data[, 1]
 area
 
 # Extracting
 area[13]
-# Or from data matrix,equals
+# Or from data matrix, equals
 data[13, 1]
 AvgWid[3]
 
 # Mode, data types
 mode(Alt)
-mode(Fluct)		
-# Numeric is undesirable
+mode(Fluct)	
+	
+# Change data type from numeric to factor
 is.factor(Fluct)
 Fluct <- as.factor(Fluct)
 is.factor(Fluct)
 
-# Plot
-
+# Plot data -----------------------------------------------------------------
 # Import library
 library(ggplot2)
 
@@ -62,8 +81,7 @@ data$Color <- c(rep(x = 3, times = 10), rep(x = 4, times = 54))
 # Plot different colors
 my_ggplot <- ggplot(data, aes(x = Alt))
 my_ggplot + geom_point(aes(y = Species, color = factor(Color)))
-my_ggplot + geom_text(aes(y = Species, label = labels))   #Fungerer ikke!
-
+my_ggplot + geom_text(aes(y = Species, label = labels)) 
 
 # Correlation test
 cor.test(AvgWid, Species, method = "kendall")
@@ -76,7 +94,7 @@ library(zoo)
 help.search("zoo")
 # Install zoo package from toolbar menu
 
-
+# Make models --------------------------------------------------------------------
 # Generalised linear modelling (GLM) of count data requires Poisson family errors
 # We intend to build a GLM model for species richness as a function of the six 
 # environmental variables Parea, AvgWid, MaxDeo, Alt, Cnd and pH
@@ -159,9 +177,11 @@ summary(model5a)
 # Conclusion:model5a is the best, three single variables and two interaction terms are significant
 
 
-
-# The modelling as carried out above is inadequate for two reasons: (1) because the multiple-testing problem was not taken into account when
-# models were built by forward selection, and (2) because the data do not follow the poisson distribution!
+# Problems with models ----------------------------------------------------------------
+# The modelling as carried out above is inadequate for two reasons: 
+# (1) because the multiple-testing problem was not taken into account when
+# models were built by forward selection, and 
+# (2) because the data do not follow the poisson distribution!
 
 # The first problem can be remedied by new analyses with a stricter criterion for selecting variables at each step.
 # The second problem is more complex and is addressed as follows:

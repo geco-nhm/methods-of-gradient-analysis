@@ -1,19 +1,21 @@
+#######################################################
+# P1 Zero-skewness transformation
+#######################################################
+
 # Import libraries
-library(readxl)
 library(e1071) # needed for skewness function
 library(ggplot2)
 library(dplyr)
 
-# Importing data 
-data <- read.table("clipboard", header = TRUE)
+# Check and change the working directory if necessary
+getwd()
+#setwd("C:/Users/yourUserName/.../methods-of-gradient-analysis")
 
+# Import data from file
+env.var <- read.csv("P1_Oppkuven_environmental_variables.csv") %>% 
+	as.data.frame()
 
-# Automatic import
-setwd("C:/Users/"[insert the path to your working directory here]) #Set working directory
-
-# Import excel sheets
-data <- read_xls("P2_Oppkuven.xls", sheet = "Env.var", skip = 1) %>% as.data.frame()
-
+# Attach data to the R environment
 attach(data)
 names(data)
 
@@ -57,13 +59,17 @@ minskew <- function(x) {
 }
 
 res <- minskew(x)
+
 # Standardised skewness of the original (untransformed) variable
 skewness(x) / (6 / length(x))^0.5
+
 # c value and skewness after zero skewness transformation
 res$c
 res$skew
+
 # standardised skewness of the transformed variable
 (res$skew) / (6 / length(x))^0.5
+
 # Ranging and printout of the ranged variable
 standx <- scalex(x, res$c)
 rangx <- (standx - min(standx)) / (max(standx) - min(standx))
